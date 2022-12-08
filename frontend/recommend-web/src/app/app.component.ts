@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AccountService } from './services';
+// import { AccountService } from './services';
 import { User } from './models';
 @Component({
   selector: 'app-root',
@@ -9,11 +9,11 @@ import { User } from './models';
 export class AppComponent {
   user: User;
 
-  constructor(private accountService: AccountService) {
-      this.accountService.user.subscribe(x => this.user = x);
+  constructor() {
+      // this.accountService.user.subscribe(x => this.user = x);
   }
 
   logout() {
-      this.accountService.logout();
+      // this.accountService.logout();
   }
 }
