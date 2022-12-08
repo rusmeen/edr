@@ -1,14 +1,120 @@
 <!-- nav -->
 <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="user">
   <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      <a class="nav-item nav-link" routerLink="/users" routerLinkActive="active">Users</a>
-      <a class="nav-item nav-link" (click)="logout()">Logout</a>
+    <a class="nav-item nav-link" routerLink="/" routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a class="nav-item nav-link" routerLink="/users" routerLinkActive="active">Users</a>
+    <a class="nav-item nav-link" (click)="logout()">Logout</a>
   </div>
 </nav>
-
-<!-- main app container -->
 <div class="app-container" [ngClass]="{ 'bg-light': user }">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">EDR</a>
+        <div class="social-media order-lg-last">
+          <p class="mb-0 d-flex">
+            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i
+                  class="sr-only">Facebook</i></span></a>
+            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i
+                  class="sr-only">Twitter</i></span></a>
+            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i
+                  class="sr-only">Instagram</i></span></a>
+
+          </p>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+          aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="fa fa-bars"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto mr-md-3">
+            <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  </div>
   <!-- <alert></alert> -->
-  <router-outlet></router-outlet>
+
 </div>
+<div class="d-flex">
+
+  <!-- <div class="sidebar-container m-3">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+        <span class="fs-4">Sidebar</span>
+      </a>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" aria-current="page">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home"></use>
+            </svg>
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#speedometer2"></use>
+            </svg>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#table"></use>
+            </svg>
+            Orders
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#grid"></use>
+            </svg>
+            Products
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#people-circle"></use>
+            </svg>
+            Customers
+          </a>
+        </li>
+      </ul>
+      <hr>
+      <div ngbDropdown class="dropdown">
+        <a  class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2"
+           aria-expanded="false" ngbDropdownToggle>
+          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+          <strong>Amit</strong>
+        </a>
+        <ul ngbDropdownMenu class="dropdown-menu text-small shadow">
+          <li ngbDropdownItem><a class="dropdown-item" >New project...</a></li>
+          <li ngbDropdownItem><a class="dropdown-item" >Settings</a></li>
+          <li ngbDropdownItem><a class="dropdown-item" >Profile</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li ngbDropdownItem><a class="dropdown-item">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+  </div> -->
+  <div class="main-app-container container-fluid mt-3">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<!-- main app container -->

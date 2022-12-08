@@ -1,0 +1,27 @@
+<div class="card">
+    <mat-stepper [linear]="false" #stepper>
+        <mat-step  label="Add Category">
+            <edr-category></edr-category>
+            <div class="mt-1">
+                <button class="btn btn-outline-dark float-right" matStepperNext>Next</button>
+            </div>
+
+        </mat-step>
+        <mat-step  label="Upload data">
+            <div class="mt-1">
+                <button class="btn btn-outline-dark  float-left" matStepperPrevious>Back</button>
+                <button class="btn btn-outline-dark  float-right" matStepperNext>Next</button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Review</ng-template>
+            <p>Done.</p>
+            <div>
+                <button class="btn btn-outline-dark  float-left" matStepperPrevious>Back</button>
+                <button class="btn btn-outline-dark  float-right" (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+
+
+</div>

@@ -1,6 +1,40 @@
-
 .app-container {
-    min-height: 320px;
+    min-height: 60px;
     overflow: hidden;
-    
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+.social-media p a {
+    border: 1px solid #e6e6e6;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 4px;
+    text-decoration: none;
+}
+
+.social-media p a span {
+    color: #4d4d4d;
+}
+
+.social-media p a:hover {
+    background: #fc7fb2;
+    border-color: #fc7fb2;
+}
+
+.social-media p a:hover span {
+    color: #fff;
+}
+
+@media (max-width: 991.98px) {
+    .social-media p a {
+        border-color: #fff;
+        width: 30px;
+        height: 30px;
+    }
+
+    .social-media p a span {
+        color: #fff;
+    }
+}
+

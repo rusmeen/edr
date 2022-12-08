@@ -1,0 +1,135 @@
+<div class="card mt-1">
+    <div class="card-header">
+        <button class="btn btn-light btn-outline-dark"
+            (click)="addOrEditCategory('add' , addOrEditModal)"><i class="fa fa-plus mr-1"></i>Add
+            Category</button>
+        <div class="float-right">
+            <input type="text" class="form-control" placeholder="Search...">
+        </div>
+    </div>
+    <div class="card-body d-flex flex-row flex-wrap">
+        <div class="card category-card box-shadow-for-category m-2 w-16 h-20"
+            *ngFor="let x of data; trackBy:trackByfunction">
+            <div class="card-header p-1">
+
+                <p class="card-title">{{x.categoryName}}</p>
+
+
+                <!-- <div ngbDropdown class="dropdown">
+                <a class="float-right" ngbDropdownToggle><i class="fa fa-ellipsis"></i> 
+                  
+                </a>
+                <ul ngbDropdownMenu class="dropdown-menu text-small shadow">
+                  <li ngbDropdownItem><a class="dropdown-item" >New project...</a></li>
+                  <li ngbDropdownItem><a class="dropdown-item" >Settings</a></li>
+                  <li ngbDropdownItem><a class="dropdown-item" >Profile</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li ngbDropdownItem><a class="dropdown-item">Sign out</a></li>
+                </ul>
+              </div> -->
+            </div>
+            <div class="card-body">
+                {{x.categoryDesc}}
+            </div>
+            <div class="card-footer d-flex justify-content-end category-footer p-1">
+                <button class="btn btn-outline-pink float-right"
+                    (click)="addOrEditCategory('edit' , addOrEditModal , x.id)"><i
+                        class="fa fa-edit"></i></button>
+                <button class="btn btn-outline-pink float-right"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- template for Add or Edit operation -->
+<ng-template #addOrEditModal>
+    <div class="card">
+
+        <div class="card-header">
+            <span *ngIf="operation =='add'">Add</span>
+            <span *ngIf="operation =='edit'">Edit</span>
+            <button class="close float-right" (click)="closeModal()"> <span>&times;</span></button>
+        </div>
+        <div class="card-body">
+           
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" formControlName="name" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['name']['errors'] }" />
+                    <div *ngIf="submitted && f['name']['errors']" class="invalid-feedback">
+                        <div *ngIf="f['name']['errors']['required']">Name is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" formControlName="description" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['description']['errors'] }" />
+                    <div *ngIf="submitted && f['description']['errors']" class="invalid-feedback">
+                        <div *ngIf="f['description']['errors']['required']">Description is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="margin">Margin</label>
+                    <input type="margin" formControlName="margin" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['margin']['errors'] }" />
+                    <div *ngIf="submitted && f['margin']['errors']" class="invalid-feedback">
+                        <div *ngIf="f['margin']['errors']['required']">margin is required</div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="LORD">LORD</label>
+                    <input type="LORD" formControlName="LORD" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['LORD']['errors'] }" />
+                    <div *ngIf="submitted && f['LORD']['errors']" class="invalid-feedback">
+                        <div *ngIf="f['LORD']['errors']['required']">LORD is required</div>
+
+                    </div>
+                </div>
+                <div class="example-container w-100">
+                <div  class="example-list" cdkDropList
+                #todoList="cdkDropList"
+                [cdkDropListData]="todo"
+                [cdkDropListConnectedTo]="[doneList]"
+                class="example-list w-100"
+                (cdkDropListDropped)="drop($event)">
+                <div *ngIf="todo.length==0" class="opacity-50 p-3 text-center"> Drag the Additional properties here...</div>
+                <div class="example-box d-block" *ngFor="let item of todo" cdkDrag>
+
+                <div class="form-group">
+                    <label for="LORD">{{item.categoryName}}</label>
+                    <input type="{{item.type}}"  class="form-control"
+                        />
+                    <!-- <div *ngIf="submitted && f['LORD']['errors']" class="invalid-feedback">
+                        <div *ngIf="f['LORD']['errors']['required']">LORD is required</div>
+
+                    </div> -->
+                </div>
+                </div>
+            </div>
+                </div>
+            </form>
+      <div class="example-container">    
+        <h3>Additional properties</h3>
+  <div
+  cdkDropList
+  #doneList="cdkDropList"
+  [cdkDropListData]="done"
+  [cdkDropListConnectedTo]="[todoList]"
+  class="example-list"
+  (cdkDropListDropped)="drop($event)">
+  <div class="example-box" *ngFor="let item of done" cdkDrag>{{item.categoryName}}</div>
+</div>
+</div>  
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary float-right">Ok</button>
+        </div>
+
+    </div>
+
+</ng-template>
