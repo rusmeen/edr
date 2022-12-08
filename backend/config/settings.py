@@ -34,6 +34,8 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "localhost:3000",
+    "ec2-34-230-153-41.compute-1.amazonaws.com",
+    "ec2-34-230-153-41.compute-1.amazonaws.com:5432"
 ]
 # Application definition
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "api",
+    "erd_microsvc",
 ]
 
 MIDDLEWARE = [
@@ -88,7 +91,8 @@ DATABASES = {
         "NAME": env("DB_NAME"),
         "USER": env("DB_USERNAME"),
         "PASSWORD": env("DB_PASSWORD"),
-        "HOST": "127.0.0.1",
+        # "HOST": "127.0.0.1",
+        "HOST" : env("DB_HOST"),
         "PORT": "5432",
     }
 }

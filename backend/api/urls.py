@@ -18,4 +18,6 @@ from . import views
 
 urlpatterns = [
     path("api/v1/users/", views.UserListAPI.as_view()),
+    path("api/v1/users/all",views.CategoryList.as_view()),
+    path("api/v1/category/<pk>",views.by_id),
 ]
