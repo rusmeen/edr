@@ -1,0 +1,13 @@
+:host ::ng-deep {   .mat-horizontal-stepper-header {
+       
+       flex-direction: column;
+  
+}
+.mat-stepper-horizontal-line{
+    border-width: 4px !important;
+    margin: 0px -40px !important;
+}
+
+.mat-horizontal-stepper-header .mat-step-icon{
+    margin-top: 20px;
+}}

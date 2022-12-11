@@ -6,6 +6,7 @@ import { InputDataRoutingModule } from './input-data-routing.module';
 import { HomeComponent ,CategoryComponent ,FileUploadComponent} from '../../components';
 
 import { MaterialModule } from '../../modules/material.module';
+import { UtilityService } from '../../services';
 
 @NgModule({
     imports: [
@@ -19,6 +20,6 @@ import { MaterialModule } from '../../modules/material.module';
         CategoryComponent,
         FileUploadComponent
     ],
-    providers: [ ]
+    providers: [ UtilityService]
 })
 export class InputDataModule { };

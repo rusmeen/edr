@@ -35,7 +35,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "localhost:3000",
     "ec2-34-230-153-41.compute-1.amazonaws.com",
-    "ec2-34-230-153-41.compute-1.amazonaws.com:5432"
+    "ec2-34-230-153-41.compute-1.amazonaws.com:5432",
+"localhost:4200",
 ]
 # Application definition
 
@@ -50,9 +51,29 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "api",
     "erd_microsvc",
+     "corsheaders",
+]
+
+CORS_ALLOWED_ORIGINS = [
+   "http://127.0.0.1",
+    "http://localhost",
+    "http://localhost:3000",
+    "http://ec2-34-230-153-41.compute-1.amazonaws.com",
+    "http://ec2-34-230-153-41.compute-1.amazonaws.com:5432",
+"http://localhost:4200",
+]
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
 ]
 
 MIDDLEWARE = [
+     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -60,6 +81,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
 ROOT_URLCONF = "config.urls"
