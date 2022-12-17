@@ -58,8 +58,8 @@ CORS_ALLOWED_ORIGINS = [
    "http://127.0.0.1",
     "http://localhost",
     "http://localhost:3000",
-    "http://ec2-34-230-153-41.compute-1.amazonaws.com",
-    "http://ec2-34-230-153-41.compute-1.amazonaws.com:5432",
+    "http://tiny.db.elephantsql.com",
+    "http://tiny.db.elephantsql.com:5432",
 "http://localhost:4200",
 ]
 
