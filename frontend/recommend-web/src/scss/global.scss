@@ -26,3 +26,9 @@
 .form-group {
     padding-bottom: 0.75rem;
 }
+
+.text-ellipsis{
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}

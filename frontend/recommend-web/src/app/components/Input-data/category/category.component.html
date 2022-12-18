@@ -7,8 +7,8 @@
             <input type="text" class="form-control" placeholder="Search...">
         </div>
     </div>
-    <div class="card-body d-flex flex-row flex-wrap">
-        <div class="card category-card box-shadow-for-category m-2 w-16 h-20"
+    <div *ngIf="!loading" class="card-body d-flex flex-row flex-wrap">
+        <div  class="card category-card box-shadow-for-category m-2 w-16 h-20"
             *ngFor="let x of categories; trackBy:trackByfunction">
             <div class="card-header p-1">
 
@@ -39,6 +39,11 @@
                 <button class="btn btn-outline-pink float-right"><i class="fa fa-trash"></i></button>
             </div>
         </div>
+       
+    </div>
+    <div *ngIf="loading" class="card-body" style="height:300px">
+        <mat-progress-spinner style="position:absolute !important;top:50% !important; left:50% !important;" mode="indeterminate" diameter='45' ></mat-progress-spinner>
+    
     </div>
 </div>
 
@@ -54,13 +59,14 @@
         </div>
         <div class="card-body d-flex">
             <div class="col-8">
-                <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="categoryForm" >
                     <div class="form-group">
-                        <label for="name">Name</label>
+                        <label for="name">Label</label>
                         <input type="text" formControlName="name" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f['name']['errors'] }" />
+                            <!-- <mat-spinner [diameter]="40"></mat-spinner> -->
                         <div *ngIf="submitted && f['name']['errors']" class="invalid-feedback">
-                            <div *ngIf="f['name']['errors']['required']">Name is required</div>
+                            <div *ngIf="f['name']['errors']['required']">Label is required</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -84,16 +90,16 @@
                         <label for="lord">Lord</label>
                         <input type="number" formControlName="lord1" class="form-control m-1"
                             [ngClass]="{ 'is-invalid': submitted && f['lord1']['errors'] }" />
-                        <div *ngIf="submitted && f['lord1']['errors']" class="invalid-feedback">
+                        <!-- <div *ngIf="submitted && f['lord1']['errors']" class="invalid-feedback">
                             <div *ngIf="f['lord1']['errors']['required']">Start value is Required</div>
 
-                        </div>
+                        </div> -->
                         <input type="number" formControlName="lord2" class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f['lord2']['errors'] }" />
-                    <div *ngIf="submitted && f['lord2']['errors']" class="invalid-feedback">
+                    <!-- <div *ngIf="submitted && f['lord2']['errors']" class="invalid-feedback">
                         <div *ngIf="f['lord2']['errors']['required']">End value is Required</div>
 
-                    </div>
+                    </div> -->
                     </div>
                     <div class="example-container w-100">
                         <div class="example-list" cdkDropList #todoList="cdkDropList" [cdkDropListData]="todo"
@@ -101,8 +107,8 @@
                             (cdkDropListDropped)="drop($event)">
                             <div *ngIf="todo.length==0" class="opacity-50 p-3 text-center"> Drag the Additional
                                 properties here...</div>
-                            <div class="badge bg-info mx-1 w-16" *ngFor="let item of todo;let i = index;" cdkDrag>
-                                {{item.name}}<span></span>
+                            <div class="badge bg-info mx-1 w-16 text-ellipsis my-1"  *ngFor="let item of todo;let i = index;" cdkDrag>
+                               <span placement="bottom" ngbTooltip="Hello"> {{item.name}}</span>
 
                                 <!-- <div class="badge bg-info mx-1 w-16">{{item.categoryName}}</div> -->
                                 <!-- <button class="close float-right" (click)="closeDrop(item,i)"> <span>&times;</span></button> -->
@@ -123,7 +129,7 @@
                     <h3>Additional properties</h3>
                     <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="additionalProperties"
                         [cdkDropListConnectedTo]="[todoList]" (cdkDropListDropped)="drop($event)">
-                        <div class="badge bg-info mx-1 w-16" *ngFor="let item of additionalProperties" cdkDrag>
+                        <div class="badge bg-info mx-1 w-16 text-ellipsis my-1" *ngFor="let item of additionalProperties" cdkDrag>
                             {{item.name}} <span></span></div>
                     </div>
                 </div>
@@ -187,7 +193,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary float-right"><span *ngIf="operation =='add'" (click)="addCategory()">Add</span>
+            <button class="btn btn-primary float-right" (click)="saveCategory()"><span *ngIf="operation =='add'" >Add</span>
                 <span *ngIf="operation =='edit'">Edit</span></button>
         </div>
 

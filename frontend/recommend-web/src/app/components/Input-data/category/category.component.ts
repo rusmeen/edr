@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal,NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { UtilityService } from 'src/app/services';
 
 @Component({
@@ -14,10 +14,13 @@ export class CategoryComponent implements OnInit {
   operation: string;
   categoryForm: FormGroup;
   propertiesForm: FormGroup;
-  submitted: boolean;
-  submittedProperty:boolean;
+  submitted: boolean; // flag when save category is clicked
+  submittedProperty:boolean; // flag when add property button is clicked
   categories: any;
   additionalProperties:any;
+  dataToBeSent: any[];
+  additionalPropertiesAdded: any;
+  loading:boolean;
   constructor(private modal: NgbModal, private formBuilder: FormBuilder
     ,private utility:UtilityService) {}
 
@@ -25,6 +28,7 @@ export class CategoryComponent implements OnInit {
     this.submitted = false;
     this.submittedProperty =false;
     this.data = []; 
+    this.loading =false;
     this.additionalProperties = [];
     this.getCategories();
     this.propertiesForm = this.formBuilder.group({
@@ -48,16 +52,22 @@ export class CategoryComponent implements OnInit {
    */
 
   getCategories() {
+    //   this.loading = true;
 // this.utility.networkCall({'method':'GET','url':'http://127.0.0.1:8000/api/v1/category/105'}).subscribe((response)=>{
 // console.log(response) 
 // if(response.body)
 // {this.data = response.body;
 //   this.categories = JSON.parse(this.data.schema).categories;
 //   console.log(this.categories);
+//      this.loading =false;
 //   this.updateAdditionalProperties();}
 // else
 // return;
 // })
+this.loading = true;
+setTimeout(()=>{
+  this.loading = false;
+},3000)
 this.data =  {
   "key_id": "102",
   "category": "Restorant",
@@ -93,6 +103,8 @@ this.categories = this.data.schema.categories;
 
   addOrEditCategory(operation: string, addOrEditModal: any, category?: any) {
     this.operation = operation;
+    this.submitted = false;
+    this.submittedProperty = false;
     if (operation =='edit') {
       this.f['name'].setValue(category.name);
       this.f['description'].setValue(category.description);
@@ -130,13 +142,14 @@ this.categories = this.data.schema.categories;
     this.modal.dismissAll();
   }
 
-  onSubmit() {
+ categoryFormValidation() {
     this.submitted = true;
 
     // stop here if form is invalid
     if (this.categoryForm.invalid) {
-      return;
+      return false;
     }
+    return true
   }
   todo = [];
 
@@ -177,15 +190,27 @@ this.categories = this.data.schema.categories;
     }
     return icon;
   }
-
-  addCategory () {
+  saveCategory () {
+    let validFlag = this.categoryFormValidation();
+    if(!validFlag) {
+     return;
+    }
+    if (this.operation =='add') {
+  
+    this.todo =[];
     let obj={"name": this.f['name'].value,
     "description":this.f['description'].value,
     "lord":[this.f['lord1'].value,this.f['lord2'].value],
    "rank_definer": this.f['rank_definer'].value};
-    
-    let dataToBeSent = this.categories;
-    dataToBeSent.schema.categories.push(obj)
+    obj['others'] = this.additionalPropertiesAdded;
+    console.log(obj);
+    this.dataToBeSent = [];
+    this.data.schema.categories.push(obj);
+    this.utility.networkCall({method:'PUT',data:this.categories}).subscribe((resp)=>{
+      console.log(resp);
+      this.modal.dismissAll();
+    });
+  }
   }
 
   addProperty () {
@@ -203,6 +228,9 @@ console.log(this.propertiesForm)
   }
   console.log(obj);
   this.todo.push(obj);
+  this.additionalPropertiesAdded = this.todo;
+  this.submittedProperty = false;
+  this.propertiesForm.reset();
 }
 
 setDataTypeForProperty(type) {
