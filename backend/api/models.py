@@ -10,13 +10,6 @@ class Category_schema(models.Model):
     schema = jsonfield.JSONField()
     category_rank = models.IntegerField() 
 
-    class Meta:
-        # Gives the proper plural name for admin
-        verbose_name_plural = "Categories"
-
-    def __str__(self):
-        return self.schema 
-
 class Users(models.Model):
     id = models.CharField(max_length=100,primary_key=True,unique=True)
     name = models.CharField(max_length=100)
@@ -30,6 +23,7 @@ class Users(models.Model):
     is_active = models.BooleanField(default=True)
     create_ts = models.DateTimeField(auto_now_add=True)
     address = jsonfield.JSONField()
+
 
 
 
