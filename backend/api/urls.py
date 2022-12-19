@@ -30,7 +30,10 @@ urlpatterns = [
     
     path("api/v1/category/schema/others/<pk>", views.get_other_properties_till_now),
     path("api/v1/category/schema/<pk>", views.get_schema),
-     path("api/v1/category/schema/add/<pk>", views.post_category),
+    path("api/v1/category/schema/add/<pk>", views.post_label),
+    path("api/v1/category/schema/delete/<pk>", views.delete_label_from_schema),
+    path("api/v1/category/schema/edit/<pk>", views.edit_label),
+
 
 
 ]

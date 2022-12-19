@@ -13,6 +13,8 @@ from rest_framework.decorators import api_view
 from rest_framework import generics
 from api.serializers import RegisterSerializer, UserSerializer
 from django.forms.models import model_to_dict
+from  businesslogics.category_util import category_util as cat_util
+from django.forms.models import model_to_dict
 
 
 
@@ -55,53 +57,6 @@ class CategoryList(APIView):
             category_serializer.save()
             return JsonResponse(category_serializer.data, status=status.HTTP_201_CREATED) 
         return JsonResponse(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['PUT'])
-def post_category(request,pk):
-    try:
-        category =  Category_schema.objects.get(pk=pk) 
-        original_category = category
-
-        
-        new_category_data = JSONParser().parse(request)
-        # new_category_data = json.loads(new_category_data)
-        
-        schema = category.schema
-        # if isinstance(schema, str):
-        #     schema = json.dumps(schema)
-        print(schema)
-        new_loaded_schema = json.loads(schema.replace("\\", " "))
-        category.schema = new_loaded_schema
-        print(type(new_loaded_schema))
-        categories_list = new_loaded_schema['categories']
-
-        print (type(schema))
-        print(type(categories_list[0]))
-        print(type(new_category_data))
-        value_exists =False
-        for index, dictionary in enumerate(categories_list):
-            if dictionary['name'] == new_category_data['name']:
-                value_exists = True
-                break
-        print(value_exists)
-        if value_exists == False:
-            categories_list.append(new_category_data)
-            schema['categories'] = categories_list
-            category.schema = schema
-        print((category))
-
-        dict = model_to_dict(category)
-        print(dict)
-        print(original_category)
-        category_serializer = categorySchemaSerializer(original_category,data=dict)
-        if category_serializer.is_valid():
-            category_serializer.save()
-            return JsonResponse(category_serializer.data, status=status.HTTP_201_CREATED) 
-        return JsonResponse(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    except Category_schema.DoesNotExist: 
-                return JsonResponse({'message': 'The Category does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -202,8 +157,129 @@ def get_other_properties_till_now(request, pk):
         return JsonResponse({'message': 'The Category does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['DELETE'])
+def delete_label_from_schema(request , pk):
+    try: 
+        category =  Category_schema.objects.get(pk=pk) 
+        schema = category.schema
+        print("schema ====> ",schema)
+        new_loaded_schema = json.loads(schema)
+        category.schema = new_loaded_schema
+        req   = JSONParser().parse(request)
+        # print the keys and values
+        categories_list = new_loaded_schema['categories']
+        print('req :' ,req)
+        # to delete dictionary in list
+        res = [i for i in categories_list if not (i['name'] == req['name'])]
+        new_loaded_schema['categories'] = res
+        category.schema = new_loaded_schema
+        print((category))
+
+        dict = model_to_dict(category)
+        category_serializer = categorySchemaSerializer(category,data=dict) 
+        if category_serializer.is_valid():
+            category_serializer.save()
+            return JsonResponse(category_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+    except Category_schema.DoesNotExist: 
+        return JsonResponse({'message': 'The Category does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
+
+@api_view(['PUT'])
+def post_label(request,pk):
+    try:
+        category =  Category_schema.objects.get(pk=pk) 
+        original_category = category
+
+        
+        new_category_data = JSONParser().parse(request)
+        # new_category_data = json.loads(new_category_data)
+
+        schema = category.schema
+        # if isinstance(schema, str):
+        #     schema = json.dumps(schema)
+        print(schema)
+        new_loaded_schema = json.loads(schema.replace("\\", " "))
+        all_category_till_now = cat_util.get_all_category(new_loaded_schema['categories'])
+
+        if new_category_data['name'] in all_category_till_now:
+            return  JsonResponse({'message': 'The Category already exists'}, status=status.HTTP_403_FORBIDDEN)
+
+
+        category.schema = new_loaded_schema
+        print(type(new_loaded_schema))
+        categories_list = new_loaded_schema['categories']
+        value_exists =False
+        for index, dictionary in enumerate(categories_list):
+            if dictionary['name'] == new_category_data['name']:
+                value_exists = True
+                break
+        print(value_exists)
+        if value_exists == False:
+            categories_list.append(new_category_data)
+            print(type(schema))
+            new_loaded_schema['categories'] = categories_list
+            category.schema = new_loaded_schema
+        print((category))
+
+        dict = model_to_dict(category)
+        print(dict)
+        print(original_category)
+        category_serializer = categorySchemaSerializer(original_category,data=dict)
+        if category_serializer.is_valid():
+            category_serializer.save()
+            return JsonResponse(category_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Category_schema.DoesNotExist: 
+                return JsonResponse({'message': 'The Category does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['PUT'])
+def edit_label(request,pk):
+    try:
+        category =  Category_schema.objects.get(pk=pk) 
+        original_category = category
+
+        
+        new_category_data = JSONParser().parse(request)
+        # new_category_data = json.loads(new_category_data)
+
+        schema = category.schema
+        # if isinstance(schema, str):
+        #     schema = json.dumps(schema)
+        print(schema)
+        new_loaded_schema = json.loads(schema.replace("\\", " "))
+        all_category_till_now = cat_util.get_all_category(new_loaded_schema['categories'])
+
+        if new_category_data['name'] not in all_category_till_now:
+            return  JsonResponse({'message': 'The Label does not exists'}, status=status.HTTP_403_FORBIDDEN)
+
+
+        category.schema = new_loaded_schema
+        print(type(new_loaded_schema))
+        categories_list = new_loaded_schema['categories']
+        for index, dictionary in enumerate(categories_list):
+            if dictionary['name'] == new_category_data['name']:
+                categories_list[index]['name'] = new_category_data['name']
+                new_loaded_schema['categories'] = categories_list
+                category.schema = new_loaded_schema
+                break
+
+        dict = model_to_dict(category)
+        print(type(dict) , '--------------------------------dict type ') 
+        print(original_category)
+        category_serializer = categorySchemaSerializer(original_category,data=dict)
+        if category_serializer.is_valid():
+            category_serializer.save()
+            return JsonResponse(category_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Category_schema.DoesNotExist: 
+                return JsonResponse({'message': 'The Category does not exist'}, status=status.HTTP_404_NOT_FOUND)
        
    
 
