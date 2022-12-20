@@ -1,4 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+:host ::ng-deep {  
+    .cdk-overlay-container {
+      z-index: 1056 !important;
+    }
+    }
 .w-16 {
     width: 16% !important;
 }
@@ -50,4 +57,8 @@ right:0px;
         }
         .top-88{
             top:88px;
+        }
+
+        .mr-3{
+            margin-right: 3px !important;
         }

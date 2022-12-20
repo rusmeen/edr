@@ -36,7 +36,7 @@
             <div class="card-footer d-flex justify-content-end category-footer p-1">
                 <button class="btn btn-outline-pink float-right"
                     (click)="addOrEditCategory('edit' , addOrEditModal , x)"><i class="fa fa-edit"></i></button>
-                <button class="btn btn-outline-pink float-right"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-outline-pink float-right" (click)="openDeleteModal(DeleteModal , x)" ><i class="fa fa-trash"></i></button>
             </div>
         </div>
        
@@ -55,7 +55,7 @@
         <div class="card-header">
             <span *ngIf="operation =='add'">Add Category</span>
             <span *ngIf="operation =='edit'">Edit Category</span>
-            <button class="close float-right" (click)="closeModal()"> <span>&times;</span></button>
+            <button class="btn btn-close btn-sm float-right" (click)="closeModal()"> </button>
         </div>
         <div class="card-body d-flex">
             <div class="col-8 position-relative">
@@ -127,7 +127,7 @@
                 </form>
                 <div class="example-container">
                     <h3>Additional properties</h3>
-                    <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="additionalProperties"
+                    <div cdkDropList #doneList="cdkDropList" class="example-list" [cdkDropListData]="additionalProperties"
                         [cdkDropListConnectedTo]="[todoList]" (cdkDropListDropped)="drop($event)">
                         <div class="badge bg-info mx-1 w-16 text-ellipsis my-1" *ngFor="let item of additionalProperties" cdkDrag>
                             {{item.name}} <span></span></div>
@@ -200,4 +200,17 @@
 
     </div>
 
+</ng-template>
+
+<!-- template for Delete operation -->
+<ng-template #DeleteModal>
+    <div class="card">
+        <div class="card-body">
+            <span>Are you sure to delete category?</span>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-danger btn-sm float-right" (click)="deleteCategory()">Delete</button>
+            <button class="btn btn-outline-dark btn-sm float-right mr-3" (click)="closeModal()">Cancel</button>
+        </div>
+    </div>
 </ng-template>

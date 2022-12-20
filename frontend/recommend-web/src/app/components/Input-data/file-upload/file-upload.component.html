@@ -1,1 +1,11 @@
-<p>file-upload works!</p>
+<div class="card mt-1">
+    <div class="card-header">
+        <h5>FileUpload</h5>
+        <input type="file" name="files" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" />
+    </div>
+    <div class="card-body" ></div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary float-left" (click)="exportExcel()">Export Excel</button>
+    </div>
+    </div>
+

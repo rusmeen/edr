@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { debounce, debounceTime, interval, Subscription } from 'rxjs';
 import { UtilityService } from 'src/app/services';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'edr-category',
@@ -36,11 +37,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
   $inputNameForPropertyName: Subscription;
   propertyNameClass: string;
   propertiesNameArray: any;
+  categoryToBeDeleted: any;
 
   constructor(
     private modal: NgbModal,
     private formBuilder: FormBuilder,
-    private utility: UtilityService
+    private utility: UtilityService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -82,22 +85,22 @@ export class CategoryComponent implements OnInit, OnDestroy {
           this.getClassForCategoryNameChecking(inputValue);
       });
 
-      this.$inputNameForPropertyName= this.propertiesForm.controls[
-        'name'
-      ].valueChanges
-        .pipe(
-          debounce(() => {
-            this.propertyFormDetails['name'].value
-              ? (this.propertyNameClass =
-                  'fa-spin fa fa-circle-o-notch text-primary')
-              : (this.propertyNameClass = '');
-            return interval(500);
-          })
-        )
-        .subscribe((inputValue) => {
-          this.propertyNameClass =
-            this.getClassForPropertyNameChecking(inputValue);
-        });
+    this.$inputNameForPropertyName = this.propertiesForm.controls[
+      'name'
+    ].valueChanges
+      .pipe(
+        debounce(() => {
+          this.propertyFormDetails['name'].value
+            ? (this.propertyNameClass =
+                'fa-spin fa fa-circle-o-notch text-primary')
+            : (this.propertyNameClass = '');
+          return interval(500);
+        })
+      )
+      .subscribe((inputValue) => {
+        this.propertyNameClass =
+          this.getClassForPropertyNameChecking(inputValue);
+      });
   }
 
   ngOnDestroy(): void {
@@ -262,25 +265,40 @@ export class CategoryComponent implements OnInit, OnDestroy {
     if (!validFlag) {
       return;
     }
-    if (this.operation == 'add') {
+   
       this.todo = [];
       let obj = {
-        name: this.f['name'].value,
-        description: this.f['description'].value,
-        lord: [this.f['lord1'].value, this.f['lord2'].value],
-        rank_definer: this.f['rank_definer'].value,
+              name: this.f['name'].value,
+              description: this.f['description'].value,
+              lord: [this.f['lord1'].value, this.f['lord2'].value],
+              rank_definer: this.f['rank_definer'].value,
+            
       };
-      obj['others'] = this.additionalPropertiesAdded;
+      obj['others'] = this.additionalPropertiesAdded
+        ? this.additionalPropertiesAdded
+        : [];
       console.log(obj);
       this.dataToBeSent = [];
-      this.data.schema.categories.push(obj);
+      // this.data.schema.categories.push(obj);
       this.utility
-        .networkCall({ method: 'PUT', data: this.categories })
+        .networkCall({
+          method: 'PUT',
+          url: `http://127.0.0.1:8000/api/v1/category/schema/add/${this.user}`,
+          data: JSON.stringify(obj),
+        })
         .subscribe((resp) => {
           console.log(resp);
+          if(resp.status == 201)
+          {
+          this._snackBar.open(this.operation == 'add' ? 'New Category Created':'Category Updated', 'x', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration:5000});
           this.modal.dismissAll();
+          this.getCategories();
+          }
         });
-    }
+    
   }
 
   addProperty() {
@@ -318,7 +336,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return dataType;
   }
 
-    // ************************************  for Categories Name Check *****************************************
+  // ************************************  for Categories Name Check *****************************************
   formCategoriesLabelArray() {
     let categoriesNameArray = [];
     this.categories.forEach((element) => {
@@ -338,6 +356,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
       if (!this.checkCategoryName(value)) {
         icon = 'fa-check text-success';
       } else {
+        this._snackBar.open('Category Already Exists', 'x', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration:50000})
         icon = 'fa-exclamation-triangle text-danger';
       }
     }
@@ -368,5 +390,31 @@ export class CategoryComponent implements OnInit, OnDestroy {
       }
     }
     return icon;
+  }
+
+  openDeleteModal(deleteTemplate, x) {
+    this.modal.open(deleteTemplate);
+    this.categoryToBeDeleted = x.name;
+  }
+
+  deleteCategory() {
+    this.utility
+      .networkCall({
+        method: 'DELETE',
+        url: `http://127.0.0.1:8000/api/v1/category/schema/delete/${this.user}`,
+        data: JSON.stringify({ name: this.categoryToBeDeleted }),
+      })
+      .subscribe((resp) => {
+     if(resp.status == 201)
+     {
+      this.closeModal();
+      this._snackBar.open('Category Deleted', 'x', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration:5000});
+        this.getCategories();
+ 
+     }
+    }); 
   }
 }
