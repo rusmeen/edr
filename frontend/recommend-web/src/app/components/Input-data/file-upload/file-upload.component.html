@@ -1,11 +1,36 @@
 <div class="card mt-1">
     <div class="card-header">
         <h5>FileUpload</h5>
-        <input type="file" name="files" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" />
+        <!-- <input type="file" name="files" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" /> -->
+            <div class="col-md-8 form-group">    
+      <input type="file" class="form-control" (change)="onFileChange($event)" placeholder="Upload file" accept=".xlsx">    
+    </div> 
     </div>
     <div class="card-body" ></div>
     <div class="card-footer">
         <button type="button" class="btn btn-primary float-left" (click)="exportExcel()">Export Excel</button>
     </div>
     </div>
+
+    <!-- <div class="container">    
+  <div class="row">    
+    <div class="col-md-8 form-group">    
+      <input type="file" class="form-control" (change)="uploadedFile($event)" placeholder="Upload file" accept=".xlsx">    
+    </div>    
+  </div>    
+  <div class="row">    
+    <div class="col-md-2 form-group">    
+      <button type="button" class="btn btn-info" (click)="readAsCSV()">Read as CSV</button>    
+    </div>    
+    <div class="col-md-2 form-group">    
+      <button type="button" class="btn btn-info" (click)="readAsJson()">Read as JSON</button>    
+    </div>    
+    <div class="col-md-2 form-group">    
+      <button type="button" class="btn btn-info" (click)="readAsHTML()">Read as HTML</button>    
+    </div>    
+    <div class="col-md-2 form-group">    
+      <button type="button" class="btn btn-info" (click)="readAsText()">Read as Text</button>    
+    </div>    
+  </div>    
+</div>  -->
 
